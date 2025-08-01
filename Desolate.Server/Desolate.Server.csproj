@@ -16,12 +16,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BepuPhysics" Version="2.4.0" />
+        <PackageReference Include="BepuUtilities" Version="2.4.0" />
         <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0"/>
       <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
