@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Desolate.Core\Desolate.Core.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Update="MSTest.Analyzers" Version="3.10.0">
             <PrivateAssets>all</PrivateAssets>
@@ -23,6 +19,10 @@
         <PackageReference Include="Moq" Version="4.20.72"/>
         <PackageReference Include="System.Net.Http" Version="4.3.4"/>
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Desolate\Desolate.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using Desolate.Core.Eventing;
 using Desolate.Core.Timing;
+using Desolate.Timing;
 
 namespace Desolate.Test.Timing;
 

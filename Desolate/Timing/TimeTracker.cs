@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using Desolate.Core.Event;
 using Desolate.Core.Eventing;
+using Desolate.Core.Timing;
 
-namespace Desolate.Core.Timing;
+namespace Desolate.Timing;
 
 /// <summary>
 ///     Provides information about the time state of the engine
