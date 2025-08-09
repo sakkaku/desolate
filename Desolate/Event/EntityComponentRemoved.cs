@@ -2,4 +2,4 @@ using Desolate.Ecs;
 
 namespace Desolate.Event;
 
-public record EntityComponentRemoved(Entity Entity, type ComponentType, object Component);
+public record EntityComponentRemoved(Entity Entity, Type ComponentType, object Component);

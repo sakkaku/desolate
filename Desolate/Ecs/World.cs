@@ -1,17 +1,23 @@
-using CommunityToolkit.Diagnostics;
 using Desolate.Core.Eventing;
 using Desolate.Event;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Desolate.Ecs;
 
+/// <summary>
+/// Represents the combined state of entities, components and systems.
+/// </summary>
 public sealed class World (IServiceProvider services, IEventBus eventBus) : IDisposable
 {
     private readonly EntityKeyManager _keyManager = new();
     private readonly Dictionary<int, Entity> _entities = new();
     private readonly Dictionary<Type, Dictionary<int, object>> _components = new();
-    private readonly Dictionary<Type, System> _systems = new ();
+    private readonly List<IEcsSystem> _systems = new ();
 
+    /// <summary>
+    /// Creates a new entity within the world..
+    /// </summary>
+    /// <param name="name">A human-readable name for the entity</param>
     public async ValueTask<Entity> CreateEntity(string name)
     {
         var entity = new Entity(_keyManager.GetId(), name);
@@ -20,6 +26,9 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         return entity;
     }
     
+    /// <summary>
+    /// Removes the entity from the world.
+    /// </summary>
     public async ValueTask RemoveEntity(Entity entity)
     {
         foreach (var components in _components.Values)
@@ -31,6 +40,9 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         await eventBus.RaiseEvent(new EntityRemoved(entity));
     }
     
+    /// <summary>
+    /// Adds a component to the entity.
+    /// </summary>
     public async ValueTask AddComponent<T>(Entity entity, T component) where T : notnull
     {
         var type = typeof(T);
@@ -45,6 +57,9 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         await eventBus.RaiseEvent(new EntityComponentAdded(entity, type, component));
     }
     
+    /// <summary>
+    /// Removes the component from the entity.
+    /// </summary>
     public async ValueTask RemoveComponent<T>(Entity entity)
     {
         var type = typeof(T);
@@ -58,7 +73,10 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         }
     }
     
-    public T GetComponent<T>(Entity entity)
+    /// <summary>
+    /// Retrieves the component from the entity.
+    /// </summary>
+    public T? GetComponent<T>(Entity entity)
     {
         if (_components.TryGetValue(typeof(T), out var components) && 
             components.TryGetValue(entity.Id, out var component))
@@ -69,36 +87,65 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         return default;
     }
     
+    /// <summary>
+    /// Returns true if the component exists on the entity
+    /// </summary>
     public bool HasComponent<T>(Entity entity)
     {
-        return _components.TryGetValue(typeof(T), out var components) 
+        return HasComponent(entity, typeof(T));
+    }
+
+    /// <summary>
+    /// Returns true if the component exists on the entity
+    /// </summary>
+    public bool HasComponent(Entity entity, Type componentType)
+    {
+        return _components.TryGetValue(componentType, out var components) 
                && components.ContainsKey(entity.Id);
     }
     
-    public ValueTask RegisterSystem<T>() where T : System
+    /// <summary>
+    /// Registers the system via dependency injection
+    /// </summary>
+    public async ValueTask RegisterSystem<T>() where T : IEcsSystem
     {
         var system = services.GetRequiredService<T>();
-        _systems.Add(typeof(T), system);
+        await RegisterSystem(system);
+    }
+
+    /// <summary>
+    /// Registers the system into the world.
+    /// </summary>
+    public ValueTask RegisterSystem<T>(T system) where T : IEcsSystem
+    {
+        system.World = this;
+        _systems.Add(system);
         return default;
     }
     
-    public T GetSystem<T>() where T : System
+    /// <summary>
+    /// Retrieves the systems that match the specified type.
+    /// </summary>
+    public IEnumerable<T> GetSystems<T>() where T : IEcsSystem
     {
-        Guard.IsTrue(_systems.TryGetValue(typeof(T), out var system));
-        return (T) system;
+        return _systems.OfType<T>();
     }
     
+    /// <summary>
+    /// Updates the world.
+    /// </summary>
     public async ValueTask Update(CancellationToken ct)
     {
-        foreach (var (_, system) in _systems)
+        foreach (var system in _systems)
         {
             await system.Update(ct);
         }
     }
-
+    
+    /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var system in _systems.Values)
+        foreach (var system in _systems.OfType<IDisposable>())
         {
             system.Dispose();
         }
