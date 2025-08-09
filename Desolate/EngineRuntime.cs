@@ -49,22 +49,22 @@ public class EngineRuntime(params string[] args)
     
     protected virtual ValueTask ConfigureEditor(IHostApplicationBuilder builder)
     {
-        
+        return default;
     }
 
     protected virtual ValueTask ConfigureServer(IHostApplicationBuilder builder)
     {
-        
+        return default;
     }
     
     protected virtual ValueTask ConfigureWeb(IHostApplicationBuilder builder)
     {
-        
+        return default;
     }
 
     protected virtual ValueTask PrepareInitialize(IHost app)
     {
-        
+        return default;
     }
 
     public virtual async ValueTask Run()
