@@ -1,8 +1,10 @@
-// Type aliases are used for common types within the engine
+// Type aliases are used for common types within the engine that we are not implementing
 
-global using AbsoluteTime = System.TimeSpan;
-global using DeltaTime = System.TimeSpan;
-global using Position = Silk.NET.Maths.Vector3D<double>;
-global using Velocity = Silk.NET.Maths.Vector3D<double>;
-global using Rotation = Silk.NET.Maths.Quaternion<double>;
-global using BoundingBox = Silk.NET.Maths.Box3D<double>;
+global using AbsoluteTime = double;
+global using DeltaTime = float;
+global using Position = System.Numerics.Vector3;
+global using PositionalVelocity = System.Numerics.Vector3;
+global using AngularVelocity = System.Numerics.Vector4;
+global using Rotation = System.Numerics.Vector4;
+global using BoundingBox = System.Numerics.Vector3;
+global using Distance = float;

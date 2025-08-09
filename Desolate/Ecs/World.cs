@@ -28,7 +28,7 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
     {
         var entity = new Entity(_keyManager.GetId(), name);
         _entities.Add(entity.Id, entity);
-        await eventBus.RaiseEvent(new EntityAdded(entity));
+        await eventBus.BuildAndRaiseEvent(() => ValueTask.FromResult(new EntityAdded(entity)));
         return entity;
     }
 
@@ -44,7 +44,7 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
 
         _entities.Remove(entity.Id);
         _keyManager.ReleaseId(entity.Id);
-        await eventBus.RaiseEvent(new EntityRemoved(entity));
+        await eventBus.BuildAndRaiseEvent(() => ValueTask.FromResult(new EntityRemoved(entity)));
     }
 
     /// <summary>
@@ -69,7 +69,8 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
         }
 
         components.Add(entity.Id, component);
-        await eventBus.RaiseEvent(new EntityComponentAdded(entity, type, component));
+        await eventBus.BuildAndRaiseEvent(()
+            => ValueTask.FromResult(new EntityComponentAdded(entity, type, component)));
     }
 
     /// <summary>
@@ -83,7 +84,8 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
         {
             if (components.Remove(entity.Id, out var removed))
             {
-                await eventBus.RaiseEvent(new EntityComponentRemoved(entity, type, removed));
+                await eventBus.BuildAndRaiseEvent(()
+                    => ValueTask.FromResult(new EntityComponentRemoved(entity, type, removed)));
             }
         }
     }

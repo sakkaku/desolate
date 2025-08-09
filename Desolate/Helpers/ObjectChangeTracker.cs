@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace Desolate.Helpers;
 
 /// <summary>
-///     Implements a mechanism to detect when changes happen to objects tracked by INotifyPropertyChanged
+/// Implements a mechanism to detect when changes happen to objects tracked by INotifyPropertyChanged
 /// </summary>
 public sealed class ObjectChangeTracker<T> : IDisposable where T : INotifyPropertyChanged
 {
@@ -19,7 +19,7 @@ public sealed class ObjectChangeTracker<T> : IDisposable where T : INotifyProper
     }
 
     /// <summary>
-    ///     Adds an object to the change tracker.
+    /// Adds an object to the change tracker.
     /// </summary>
     public void Track(T target)
     {
@@ -28,7 +28,7 @@ public sealed class ObjectChangeTracker<T> : IDisposable where T : INotifyProper
     }
 
     /// <summary>
-    ///     Removes an object from the change tracker.
+    /// Removes an object from the change tracker.
     /// </summary>
     public void Untrack(T target)
     {
@@ -38,7 +38,7 @@ public sealed class ObjectChangeTracker<T> : IDisposable where T : INotifyProper
     }
 
     /// <summary>
-    ///     Returns true if changes have been detected.
+    /// Returns true if changes have been detected.
     /// </summary>
     public bool HasUpdates()
     {
@@ -46,13 +46,21 @@ public sealed class ObjectChangeTracker<T> : IDisposable where T : INotifyProper
     }
 
     /// <summary>
-    ///     Retrieves the current changes and resets the tracker.
+    /// Retrieves the current changes and resets the tracker.
     /// </summary>
     public HashSet<T> GetUpdatesAndReset()
     {
         var updates = _updates;
-        _updates = [];
+        Reset();
         return updates;
+    }
+
+    /// <summary>
+    ///     Resets the tracker.
+    /// </summary>
+    public void Reset()
+    {
+        _updates = [];
     }
 
     private void TargetOnPropertyChanged(object? sender, PropertyChangedEventArgs e)

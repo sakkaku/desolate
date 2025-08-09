@@ -19,7 +19,7 @@ public class EngineRuntime(params string[] args)
     /// <summary>
     ///     The core settings object.
     /// </summary>
-    protected DesolateOptions Settings { get; private set; }
+    protected DesolateOptions? Settings { get; private set; }
 
     /// <summary>
     ///     Initializes the settings objects.
@@ -94,7 +94,7 @@ public class EngineRuntime(params string[] args)
     }
 
     /// <summary>
-    ///     Allows for setup stuff to be performed prior to the renderer starting.
+    /// Allows for setup stuff to be performed prior to the renderer starting.
     /// </summary>
     protected virtual ValueTask PrepareInitialize(IHost app)
     {
@@ -102,7 +102,7 @@ public class EngineRuntime(params string[] args)
     }
 
     /// <summary>
-    ///     Starts the engine.
+    /// Starts the engine.
     /// </summary>
     public virtual async ValueTask Run()
     {

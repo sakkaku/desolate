@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desolate.Protocols", "Desol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desolate.Test", "Desolate.Test\Desolate.Test.csproj", "{84C7C245-338F-4643-9173-E923ED6D395A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desolate.Web", "Desolate.Web\Desolate.Web.csproj", "{440B4D4E-0F20-41A1-BF73-1669E9979A85}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +24,5 @@ Global
 		{84C7C245-338F-4643-9173-E923ED6D395A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84C7C245-338F-4643-9173-E923ED6D395A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84C7C245-338F-4643-9173-E923ED6D395A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{440B4D4E-0F20-41A1-BF73-1669E9979A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{440B4D4E-0F20-41A1-BF73-1669E9979A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{440B4D4E-0F20-41A1-BF73-1669E9979A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{440B4D4E-0F20-41A1-BF73-1669E9979A85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

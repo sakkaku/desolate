@@ -1,19 +1,20 @@
 using System.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Desolate.Event;
 using Desolate.Eventing;
 
 namespace Desolate.Services;
 
 /// <summary>
-///     Provides information about the time state of the engine
+/// Provides information about the time state of the engine
 /// </summary>
 public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, IDisposable
 {
     private readonly Stopwatch _absoluteWatch = new();
 
     private readonly IDisposable _subTimeSync;
-    private AbsoluteTime _lastAbsolute = TimeSpan.Zero;
-    private DeltaTime _offset = TimeSpan.Zero;
+    private AbsoluteTime _lastAbsolute;
+    private DeltaTime _offset;
 
     /// <summary>
     ///     Initializes time tracker
@@ -45,10 +46,10 @@ public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, I
     /// <inheritdoc />
     public void Restart()
     {
-        _lastAbsolute = TimeSpan.Zero;
-        _offset = TimeSpan.Zero;
-        CurrentTime = TimeSpan.Zero;
-        DeltaTime = TimeSpan.Zero;
+        _lastAbsolute = 0;
+        _offset = 0;
+        CurrentTime = 0;
+        DeltaTime = 0;
         _absoluteWatch.Restart();
     }
 
@@ -61,8 +62,10 @@ public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, I
     /// <inheritdoc />
     public void UpdateTick()
     {
-        var absolute = _absoluteWatch.Elapsed;
-        DeltaTime = absolute - _lastAbsolute;
+        var absolute = _absoluteWatch.Elapsed.TotalMilliseconds;
+        var delta = absolute - _lastAbsolute;
+        Guard.IsLessThan(delta, float.MaxValue);
+        DeltaTime = (float)delta;
         CurrentTime = absolute + _offset;
         _lastAbsolute = absolute;
     }

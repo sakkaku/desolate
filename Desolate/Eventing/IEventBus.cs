@@ -1,12 +1,12 @@
 namespace Desolate.Eventing;
 
 /// <summary>
-///     Event bus is used to dispatch objects in an async and thread safe manner.
+/// Event bus is used to dispatch objects in an async and thread safe manner.
 /// </summary>
 public interface IEventBus
 {
     /// <summary>
-    ///     Registers a handler.  An IDisposable token is returned that should be disposed when the event is no longer needed.
+    /// Registers a handler.  An IDisposable token is returned that should be disposed when the event is no longer needed.
     /// </summary>
     IDisposable RegisterHandler<T>(IEventHandler<T> handler);
 

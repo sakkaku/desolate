@@ -9,9 +9,9 @@ public interface IEcsSystem
     /// The world that this system is registered to.  Will be initialized shortly after adding to world.
     /// </summary>
     public World? World { get; set; }
-    
+
     /// <summary>
     /// Called when the world is updated.
     /// </summary>
-    public ValueTask Update(CancellationToken ct); 
+    public ValueTask Update(CancellationToken ct);
 }

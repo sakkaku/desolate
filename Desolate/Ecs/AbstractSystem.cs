@@ -13,12 +13,12 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
     IEventHandler<EntityComponentRemoved>
 {
     private readonly IReadOnlyList<IDisposable> _events;
-    private readonly List<Entity> _trackedEntities = new();
+    private readonly List<Entity> _trackedEntities = [];
 
     /// <summary>
     ///     The component types that this system is interested in registering.
     /// </summary>
-    protected readonly HashSet<Type> ComponentTypes = new();
+    protected readonly HashSet<Type> ComponentTypes = [];
 
     /// <summary>
     /// The entities that are currently tracked by this system.
@@ -40,16 +40,11 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
         TrackedEntities = _trackedEntities;
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
 
     /// <inheritdoc />
     public World? World { get; set; }
 
+    /// <inheritdoc />
     public abstract ValueTask Update(CancellationToken ct);
 
     /// <inheritdoc />
@@ -118,11 +113,21 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
         return default;
     }
 
+    /// <summary>
+    ///     Disposes of resources
+    /// </summary>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
         {
             foreach (var registration in _events) registration.Dispose();
         }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

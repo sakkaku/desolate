@@ -14,8 +14,8 @@ public sealed class TimeTrackerTests
         var tracker = new TimeTracker(_eventBus);
         await Task.Delay(1);
         tracker.UpdateTick();
-        Assert.AreEqual(TimeSpan.Zero, tracker.DeltaTime);
-        Assert.AreEqual(TimeSpan.Zero, tracker.CurrentTime);
+        Assert.AreEqual(0, tracker.DeltaTime);
+        Assert.AreEqual(0, tracker.CurrentTime);
     }
 
     [TestMethod]
@@ -25,9 +25,9 @@ public sealed class TimeTrackerTests
         tracker.Restart();
         await Task.Delay(1);
         tracker.UpdateTick();
-        Assert.IsTrue(tracker.DeltaTime > TimeSpan.Zero);
-        Assert.IsTrue(tracker.CurrentTime > TimeSpan.Zero);
-        Assert.IsTrue(tracker.DeltaTime == tracker.CurrentTime);
+        Assert.IsTrue(tracker.DeltaTime > 0);
+        Assert.IsTrue(tracker.CurrentTime > 0);
+        Assert.IsTrue(Math.Abs(tracker.DeltaTime - tracker.CurrentTime) < 0.01);
     }
 
     [TestMethod]
@@ -35,9 +35,9 @@ public sealed class TimeTrackerTests
     {
         var tracker = new TimeTracker(_eventBus);
         tracker.Restart();
-        tracker.SetOffset(TimeSpan.FromSeconds(-60));
+        tracker.SetOffset(-60);
         await Task.Delay(1);
         tracker.UpdateTick();
-        Assert.IsTrue(tracker.CurrentTime < TimeSpan.Zero);
+        Assert.IsTrue(tracker.CurrentTime < 0);
     }
 }
