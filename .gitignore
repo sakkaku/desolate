@@ -56,3 +56,6 @@ nunit-*.xml
 
 # Jetbrains
 *.DotSettings.user
+
+# OS Junk
+.DS_Store
