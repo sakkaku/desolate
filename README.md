@@ -4,10 +4,11 @@ Desolate is a game engine mostly started to screw around with various bits of te
 
 # Goals
 
-- [ ] Actually startup and render something
-- [ ] Server First
-- [ ] ECS
 - [x] Native Async (SynchronizationContext, etc)
+- [x] Screw around with ECS
+- [ ] Authoritative server first.
+- [ ] Actually startup and render something.
+- [ ] Visual editor to build out scenes / entities / etc.
 - [ ] Visual Programming and conversion to compiled expression trees.
 - [ ] Vulkan rendering with UI in a diff thread.
 
