@@ -1,4 +1,4 @@
-namespace Desolate.Core.Eventing;
+namespace Desolate.Eventing;
 
 /// <summary>
 ///     Adapts IEventHandler to be able to process predicates.

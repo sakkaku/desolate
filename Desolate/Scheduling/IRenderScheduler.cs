@@ -1,10 +1,20 @@
-namespace Desolate.Core.Scheduling;
+namespace Desolate.Scheduling;
 
 /// <summary>
 ///     Allows for the scheduling of tasks to run against the rendering thread.
 /// </summary>
 public interface IRenderScheduler
 {
+    /// <summary>
+    ///     Delegate for shutdown event
+    /// </summary>
+    public delegate void HandleShutdown();
+
+    /// <summary>
+    ///     Delegate for start up event
+    /// </summary>
+    public delegate void HandleStartup();
+
     /// <summary>
     ///     Schedules an action against the render thread.
     /// </summary>
@@ -19,16 +29,6 @@ public interface IRenderScheduler
     ///     Notifies the queue that it should shut down.
     /// </summary>
     Task Shutdown();
-
-    /// <summary>
-    ///     Delegate for shutdown event
-    /// </summary>
-    public delegate void HandleShutdown();
-
-    /// <summary>
-    ///     Delegate for start up event
-    /// </summary>
-    public delegate void HandleStartup();
 
     /// <summary>
     ///     Raised before the main event pump is started.

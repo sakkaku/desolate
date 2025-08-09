@@ -1,7 +1,7 @@
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 
-namespace Desolate.Core.Scheduling;
+namespace Desolate.Scheduling;
 
 /// <inheritdoc />
 public sealed class RenderScheduler : IRenderScheduler

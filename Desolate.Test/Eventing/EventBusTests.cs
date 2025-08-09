@@ -1,4 +1,4 @@
-using Desolate.Core.Eventing;
+using Desolate.Eventing;
 
 namespace Desolate.Test.Eventing;
 

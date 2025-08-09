@@ -1,4 +1,4 @@
-namespace Desolate.Core.Scheduling;
+namespace Desolate.Scheduling;
 
 /// <summary>
 ///     Contains an item waiting to be scheduled along with a completion source to update.

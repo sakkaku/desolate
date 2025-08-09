@@ -1,4 +1,4 @@
-namespace Desolate.Core.Event;
+namespace Desolate.Event;
 
 /// <summary>
 ///     Notifies that a new offset is to be used for time keeping

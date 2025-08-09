@@ -1,4 +1,4 @@
-namespace Desolate.Core.Eventing;
+namespace Desolate.Eventing;
 
 /// <summary>
 /// Implements an async event bus that uses IDisposable registrations.

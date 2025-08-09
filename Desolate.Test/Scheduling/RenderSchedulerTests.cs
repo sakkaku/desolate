@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Desolate.Core.Scheduling;
+using Desolate.Scheduling;
 using Microsoft.Extensions.Logging;
 using Moq;
 

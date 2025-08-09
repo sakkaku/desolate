@@ -1,15 +1,20 @@
 using System.Diagnostics;
-using Desolate.Core.Event;
-using Desolate.Core.Eventing;
-using Desolate.Core.Timing;
+using Desolate.Event;
+using Desolate.Eventing;
 
-namespace Desolate.Timing;
+namespace Desolate.Services;
 
 /// <summary>
 ///     Provides information about the time state of the engine
 /// </summary>
 public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, IDisposable
 {
+    private readonly Stopwatch _absoluteWatch = new();
+
+    private readonly IDisposable _subTimeSync;
+    private AbsoluteTime _lastAbsolute = TimeSpan.Zero;
+    private DeltaTime _offset = TimeSpan.Zero;
+
     /// <summary>
     ///     Initializes time tracker
     /// </summary>
@@ -18,16 +23,24 @@ public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, I
         _subTimeSync = eventBus.RegisterHandler(this);
     }
 
-    private readonly IDisposable _subTimeSync;
-    private readonly Stopwatch _absoluteWatch = new();
-    private TimeSpan _offset = TimeSpan.Zero;
-    private TimeSpan _lastAbsolute = TimeSpan.Zero;
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _subTimeSync.Dispose();
+    }
 
     /// <inheritdoc />
-    public TimeSpan CurrentTime { get; private set; }
+    public ValueTask Handle(TimeSyncUpdate data, CancellationToken ct = default)
+    {
+        SetOffset(data.Offset);
+        return ValueTask.CompletedTask;
+    }
 
     /// <inheritdoc />
-    public TimeSpan DeltaTime { get; private set; }
+    public AbsoluteTime CurrentTime { get; private set; }
+
+    /// <inheritdoc />
+    public DeltaTime DeltaTime { get; private set; }
 
     /// <inheritdoc />
     public void Restart()
@@ -40,7 +53,7 @@ public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, I
     }
 
     /// <inheritdoc />
-    public void SetOffset(TimeSpan offset)
+    public void SetOffset(DeltaTime offset)
     {
         _offset = offset;
     }
@@ -52,18 +65,5 @@ public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, I
         DeltaTime = absolute - _lastAbsolute;
         CurrentTime = absolute + _offset;
         _lastAbsolute = absolute;
-    }
-
-    /// <inheritdoc />
-    public ValueTask Handle(TimeSyncUpdate data, CancellationToken ct = default)
-    {
-        SetOffset(data.Offset);
-        return ValueTask.CompletedTask;
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _subTimeSync.Dispose();
     }
 }

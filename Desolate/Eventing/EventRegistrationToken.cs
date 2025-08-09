@@ -1,4 +1,4 @@
-namespace Desolate.Core.Eventing;
+namespace Desolate.Eventing;
 
 /// <summary>
 ///     IDisposable token used to free up event registrations

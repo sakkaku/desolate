@@ -1,33 +1,29 @@
 using CommunityToolkit.Diagnostics;
-using Desolate.Core.Eventing;
 using Desolate.Event;
+using Desolate.Eventing;
 
 namespace Desolate.Ecs;
 
 /// <summary>
 /// Implements the generic functionality required for entity tracking in a system.
 /// </summary>
-public abstract class AbstractSystem : IEcsSystem, IDisposable, 
+public abstract class AbstractSystem : IEcsSystem, IDisposable,
     IEventHandler<EntityRemoved>,
     IEventHandler<EntityComponentAdded>,
     IEventHandler<EntityComponentRemoved>
 {
     private readonly IReadOnlyList<IDisposable> _events;
     private readonly List<Entity> _trackedEntities = new();
-    
+
+    /// <summary>
+    ///     The component types that this system is interested in registering.
+    /// </summary>
+    protected readonly HashSet<Type> ComponentTypes = new();
+
     /// <summary>
     /// The entities that are currently tracked by this system.
     /// </summary>
     protected readonly IReadOnlyList<Entity> TrackedEntities;
-    
-    /// <summary>
-    /// The component types that this system is interested in registering.
-    /// </summary>
-    protected readonly HashSet<Type> ComponentTypes = new();
-
-
-    /// <inheritdoc />
-    public World? World { get; set; }
 
     /// <summary>
     /// Initializes the abstract system.
@@ -44,14 +40,17 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
         TrackedEntities = _trackedEntities;
     }
 
-    public abstract ValueTask Update(CancellationToken ct);
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
 
     /// <inheritdoc />
-    public ValueTask Handle(EntityRemoved data, CancellationToken ct = default)
-    {
-        _trackedEntities.Remove(data.Entity);
-        return ValueTask.CompletedTask;
-    }
+    public World? World { get; set; }
+
+    public abstract ValueTask Update(CancellationToken ct);
 
     /// <inheritdoc />
     public async ValueTask Handle(EntityComponentAdded data, CancellationToken ct = default)
@@ -88,6 +87,13 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
         }
     }
 
+    /// <inheritdoc />
+    public ValueTask Handle(EntityRemoved data, CancellationToken ct = default)
+    {
+        _trackedEntities.Remove(data.Entity);
+        return ValueTask.CompletedTask;
+    }
+
     /// <summary>
     /// Allows for the entity to be veto'd from addition to the system.
     /// </summary>
@@ -95,7 +101,7 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
     {
         return ValueTask.FromResult(true);
     }
-    
+
     /// <summary>
     /// Called when the entity is removed from the system.
     /// </summary>
@@ -112,12 +118,11 @@ public abstract class AbstractSystem : IEcsSystem, IDisposable,
         return default;
     }
 
-    /// <inheritdoc />
-    public virtual void Dispose()
+    protected virtual void Dispose(bool disposing)
     {
-        foreach (var registration in _events)
+        if (disposing)
         {
-            registration.Dispose();
+            foreach (var registration in _events) registration.Dispose();
         }
     }
 }

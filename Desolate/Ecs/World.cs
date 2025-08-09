@@ -1,5 +1,5 @@
-using Desolate.Core.Eventing;
 using Desolate.Event;
+using Desolate.Eventing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Desolate.Ecs;
@@ -7,15 +7,21 @@ namespace Desolate.Ecs;
 /// <summary>
 /// Represents the combined state of entities, components and systems.
 /// </summary>
-public sealed class World (IServiceProvider services, IEventBus eventBus) : IDisposable
+public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisposable
 {
+    private readonly Dictionary<Type, Dictionary<int, IEcsComponent>> _components = [];
+    private readonly Dictionary<int, Entity> _entities = [];
     private readonly EntityKeyManager _keyManager = new();
-    private readonly Dictionary<int, Entity> _entities = new();
-    private readonly Dictionary<Type, Dictionary<int, object>> _components = new();
-    private readonly List<IEcsSystem> _systems = new ();
+    private readonly List<IEcsSystem> _systems = [];
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        foreach (var system in _systems.OfType<IDisposable>()) system.Dispose();
+    }
 
     /// <summary>
-    /// Creates a new entity within the world..
+    /// Creates a new entity within the world.
     /// </summary>
     /// <param name="name">A human-readable name for the entity</param>
     public async ValueTask<Entity> CreateEntity(string name)
@@ -25,7 +31,7 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         await eventBus.RaiseEvent(new EntityAdded(entity));
         return entity;
     }
-    
+
     /// <summary>
     /// Removes the entity from the world.
     /// </summary>
@@ -35,58 +41,67 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         {
             components.Remove(entity.Id);
         }
+
         _entities.Remove(entity.Id);
         _keyManager.ReleaseId(entity.Id);
         await eventBus.RaiseEvent(new EntityRemoved(entity));
     }
-    
+
+    /// <summary>
+    ///     Retrieves the entity with the given identifier.
+    /// </summary>
+    public ValueTask<Entity> GetEntity(int id)
+    {
+        return ValueTask.FromResult(_entities[id]);
+    }
+
     /// <summary>
     /// Adds a component to the entity.
     /// </summary>
-    public async ValueTask AddComponent<T>(Entity entity, T component) where T : notnull
+    public async ValueTask AddComponent<T>(Entity entity, T component) where T : notnull, IEcsComponent
     {
         var type = typeof(T);
 
         if (!_components.TryGetValue(type, out var components))
         {
-            components = new Dictionary<int, object>();
+            components = new Dictionary<int, IEcsComponent>();
             _components.Add(type, components);
         }
 
         components.Add(entity.Id, component);
         await eventBus.RaiseEvent(new EntityComponentAdded(entity, type, component));
     }
-    
+
     /// <summary>
     /// Removes the component from the entity.
     /// </summary>
     public async ValueTask RemoveComponent<T>(Entity entity)
     {
         var type = typeof(T);
-        
+
         if (_components.TryGetValue(typeof(T), out var components))
         {
             if (components.Remove(entity.Id, out var removed))
             {
-                await eventBus.RaiseEvent(new EntityComponentAdded(entity, type, removed));
+                await eventBus.RaiseEvent(new EntityComponentRemoved(entity, type, removed));
             }
         }
     }
-    
+
     /// <summary>
     /// Retrieves the component from the entity.
     /// </summary>
     public T? GetComponent<T>(Entity entity)
     {
-        if (_components.TryGetValue(typeof(T), out var components) && 
+        if (_components.TryGetValue(typeof(T), out var components) &&
             components.TryGetValue(entity.Id, out var component))
         {
-            return (T) component;
+            return (T)component;
         }
 
         return default;
     }
-    
+
     /// <summary>
     /// Returns true if the component exists on the entity
     /// </summary>
@@ -100,10 +115,10 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
     /// </summary>
     public bool HasComponent(Entity entity, Type componentType)
     {
-        return _components.TryGetValue(componentType, out var components) 
+        return _components.TryGetValue(componentType, out var components)
                && components.ContainsKey(entity.Id);
     }
-    
+
     /// <summary>
     /// Registers the system via dependency injection
     /// </summary>
@@ -122,7 +137,7 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         _systems.Add(system);
         return default;
     }
-    
+
     /// <summary>
     /// Retrieves the systems that match the specified type.
     /// </summary>
@@ -130,7 +145,7 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
     {
         return _systems.OfType<T>();
     }
-    
+
     /// <summary>
     /// Updates the world.
     /// </summary>
@@ -139,15 +154,6 @@ public sealed class World (IServiceProvider services, IEventBus eventBus) : IDis
         foreach (var system in _systems)
         {
             await system.Update(ct);
-        }
-    }
-    
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        foreach (var system in _systems.OfType<IDisposable>())
-        {
-            system.Dispose();
         }
     }
 }

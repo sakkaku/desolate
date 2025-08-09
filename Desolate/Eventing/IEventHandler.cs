@@ -1,4 +1,4 @@
-namespace Desolate.Core.Eventing;
+namespace Desolate.Eventing;
 
 /// <summary>
 ///     Implements an interface to handle a piece of data from the event bus.

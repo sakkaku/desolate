@@ -1,6 +1,5 @@
-using Desolate.Core.Eventing;
-using Desolate.Core.Timing;
-using Desolate.Timing;
+using Desolate.Eventing;
+using Desolate.Services;
 
 namespace Desolate.Test.Timing;
 

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace Desolate.Core.Scheduling;
+namespace Desolate.Scheduling;
 
 /// <summary>
 ///     Implements the ability to for await to reschedule back into the scheduler.

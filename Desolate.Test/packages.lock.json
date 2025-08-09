@@ -96,6 +96,19 @@
           "System.Runtime": "4.3.1"
         }
       },
+      "BepuPhysics": {
+        "type": "Transitive",
+        "resolved": "2.4.0",
+        "contentHash": "Ck/BJgSQrBqYrj0T9jGljDdHNILBP5kTPTylc7N/hCzR1XJJc7p6ORzwtjTfjgoYkkdajvLHxEQv6BRC8kaysQ==",
+        "dependencies": {
+          "BepuUtilities": "2.4.0"
+        }
+      },
+      "BepuUtilities": {
+        "type": "Transitive",
+        "resolved": "2.4.0",
+        "contentHash": "KNMxkzKLHAvV7jRtErxs3rPv71fHToqo/WN96HlT6iomWuwL97tohEbt0B1WA8A6sO5t6PP+qF08d4T9A8k2uA=="
+      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.1.1",
@@ -668,6 +681,11 @@
         "type": "Transitive",
         "resolved": "4.3.2",
         "contentHash": "leXiwfiIkW7Gmn7cgnNcdtNAU70SjmKW3jxGj1iKHOvdn0zRWsgv/l2OJUO5zdGdiv2VRFnAsxxhDgMzofPdWg=="
+      },
+      "Silk.NET.Maths": {
+        "type": "Transitive",
+        "resolved": "2.22.0",
+        "contentHash": "W9b5UlUGCu5Ywb5f8ZyIWJ475ucY+mT/nEiSTo3JH098VxHaZS/02bYr9f29VWBaJhh3DwMkfxQvgTyXzTrHyw=="
       },
       "System.AppContext": {
         "type": "Transitive",
@@ -1380,9 +1398,11 @@
       "desolate": {
         "type": "Project",
         "dependencies": {
+          "BepuPhysics": "[2.4.0, )",
           "CommunityToolkit.Diagnostics": "[8.4.0, )",
           "MemoryPack": "[1.21.4, )",
-          "Microsoft.Extensions.Hosting": "[9.0.7, )"
+          "Microsoft.Extensions.Hosting": "[9.0.7, )",
+          "Silk.NET.Maths": "[2.22.0, )"
         }
       }
     }

@@ -5,10 +5,10 @@ namespace Desolate.Ecs;
 /// </summary>
 public sealed class EntityKeyManager
 {
-    private int _currentId = 1;
     private const int MaxRecycled = 1024;
-    private readonly Stack<int> _recycledIds = new (MaxRecycled);
     private readonly Lock _lock = new();
+    private readonly Stack<int> _recycledIds = new(MaxRecycled);
+    private int _currentId;
 
     /// <summary>
     /// Retrieves an id for an entity
@@ -22,7 +22,7 @@ public sealed class EntityKeyManager
                 return id;
             }
 
-            return _currentId++;
+            return ++_currentId;
         }
     }
 

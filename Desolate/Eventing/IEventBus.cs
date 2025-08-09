@@ -1,4 +1,4 @@
-namespace Desolate.Core.Eventing;
+namespace Desolate.Eventing;
 
 /// <summary>
 ///     Event bus is used to dispatch objects in an async and thread safe manner.
