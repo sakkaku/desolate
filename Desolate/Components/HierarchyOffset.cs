@@ -5,39 +5,29 @@ using Desolate.Ecs;
 namespace Desolate.Components;
 
 /// <summary>
-///     Represents something that exists in the world.
+///     Provides the ability for an object to be offset from a parent object.
 /// </summary>
-public sealed class PositionedObject : IEcsComponent, INotifyPropertyChanged
+public sealed class HierarchyOffset : IEcsComponent, INotifyPropertyChanged
 {
-    private BoundingBox _boundingBox;
     private Position _position;
     private Rotation _rotation;
 
     /// <summary>
-    ///     The centerpoint of the object
+    ///     The offset position from the parent.
     /// </summary>
-    public Position Position
+    public Position DeltaPosition
     {
         get => _position;
         set => SetField(ref _position, value);
     }
 
     /// <summary>
-    ///     The rotation that the object exists on
+    ///     The offset rotation from the parent.
     /// </summary>
-    public Rotation Rotation
+    public Rotation DeltaRotation
     {
         get => _rotation;
         set => SetField(ref _rotation, value);
-    }
-
-    /// <summary>
-    ///     The bounding box that contains the object.
-    /// </summary>
-    public BoundingBox BoundingBox
-    {
-        get => _boundingBox;
-        set => SetField(ref _boundingBox, value);
     }
 
     /// <inheritdoc />

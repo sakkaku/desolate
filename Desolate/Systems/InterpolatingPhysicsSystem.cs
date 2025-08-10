@@ -20,8 +20,8 @@ public sealed class InterpolatingPhysicsSystem : AbstractSystem
     {
         _time = time;
 
-        ComponentTypes.Add(typeof(PositionedObject));
-        ComponentTypes.Add(typeof(PhysicalObject));
+        RequiredComponentTypes.Add(typeof(PositionedObject));
+        RequiredComponentTypes.Add(typeof(PhysicalObject));
     }
 
     /// <inheritdoc />
@@ -31,13 +31,13 @@ public sealed class InterpolatingPhysicsSystem : AbstractSystem
 
         foreach (var entity in TrackedEntities)
         {
-            var physics = World.GetComponent<PhysicalObject>(entity);
+            var physics = entity.GetComponent<PhysicalObject>();
 
             Guard.IsNotNull(physics);
 
             if (physics.AngularVelocity != default || physics.PositionalVelocity != default) continue;
 
-            var position = World.GetComponent<PositionedObject>(entity);
+            var position = entity.GetComponent<PositionedObject>();
 
             Guard.IsNotNull(position);
 

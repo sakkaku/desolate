@@ -1,7 +1,7 @@
 namespace Desolate.Eventing;
 
 /// <summary>
-/// Implements an async event bus that uses IDisposable registrations.
+///     Implements an async event bus that uses IDisposable registrations.
 /// </summary>
 public sealed class EventBus : IEventBus, IDisposable
 {

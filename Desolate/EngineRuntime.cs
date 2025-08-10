@@ -1,3 +1,4 @@
+using CommunityToolkit.Diagnostics;
 using Desolate.Eventing;
 using Desolate.Scheduling;
 using Desolate.Services;
@@ -94,7 +95,7 @@ public class EngineRuntime(params string[] args)
     }
 
     /// <summary>
-    /// Allows for setup stuff to be performed prior to the renderer starting.
+    ///     Allows for setup stuff to be performed prior to the renderer starting.
     /// </summary>
     protected virtual ValueTask PrepareInitialize(IHost app)
     {
@@ -102,33 +103,23 @@ public class EngineRuntime(params string[] args)
     }
 
     /// <summary>
-    /// Starts the engine.
+    ///     Starts the engine.
     /// </summary>
     public virtual async ValueTask Run()
     {
+        Guard.IsNotNull(Settings);
+
         var builder = Host.CreateApplicationBuilder(args);
 
         await ConfigureCore(builder);
 
-        if (Settings.Client.Enabled)
-        {
-            await ConfigureClient(builder);
-        }
+        if (Settings.Client.Enabled) await ConfigureClient(builder);
 
-        if (Settings.Editor.Enabled)
-        {
-            await ConfigureEditor(builder);
-        }
+        if (Settings.Editor.Enabled) await ConfigureEditor(builder);
 
-        if (Settings.Server.Enabled)
-        {
-            await ConfigureServer(builder);
-        }
+        if (Settings.Server.Enabled) await ConfigureServer(builder);
 
-        if (Settings.Web.Enabled)
-        {
-            await ConfigureWeb(builder);
-        }
+        if (Settings.Web.Enabled) await ConfigureWeb(builder);
 
         using var app = builder.Build();
 

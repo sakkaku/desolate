@@ -6,7 +6,7 @@ using Desolate.Eventing;
 namespace Desolate.Services;
 
 /// <summary>
-/// Provides information about the time state of the engine
+///     Provides information about the time state of the engine
 /// </summary>
 public sealed class TimeTracker : ITimeTracker, IEventHandler<TimeSyncUpdate>, IDisposable
 {

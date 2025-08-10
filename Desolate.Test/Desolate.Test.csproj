@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
         <PackageReference Update="MSTest.Analyzers" Version="3.10.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Desolate\Desolate.csproj" />
+        <ProjectReference Include="..\Desolate\Desolate.csproj"/>
     </ItemGroup>
 
 </Project>

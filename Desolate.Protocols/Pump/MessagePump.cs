@@ -9,11 +9,10 @@ namespace Desolate.Protocols.Pump;
 /// </summary>
 public sealed class MessagePump : IDisposable
 {
+    private const int MaxMessageSize = 0x800000; // 8 MiB
     private readonly CancellationTokenSource _cts = new();
     private readonly Stream _stream;
     private readonly SemaphoreSlim _writeSemaphore = new(1, 1);
-
-    private const int MaxMessageSize = 0x800000; // 8 MiB
 
     /// <summary>
     ///     Initializes the message pump and takes ownership of a stream.
