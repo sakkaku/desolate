@@ -63,6 +63,18 @@
           "Microsoft.Extensions.Options": "9.0.7"
         }
       },
+      "Microsoft.Extensions.Telemetry.Abstractions": {
+        "type": "Direct",
+        "requested": "[9.7.0, )",
+        "resolved": "9.7.0",
+        "contentHash": "PgzFKLbv4ciRuRNJddHPp4UZ4Yh12WOSX2aNsVpNlSp9EsZKsSjatcx90x+xAJo8jChiPxTIkLnKWjl5fC5Lig==",
+        "dependencies": {
+          "Microsoft.Extensions.Compliance.Abstractions": "9.7.0",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.7",
+          "Microsoft.Extensions.ObjectPool": "9.0.7",
+          "Microsoft.Extensions.Options": "9.0.7"
+        }
+      },
       "Silk.NET.Maths": {
         "type": "Direct",
         "requested": "[2.22.0, )",
@@ -89,6 +101,15 @@
         "type": "Transitive",
         "resolved": "1.21.4",
         "contentHash": "g14EsSS85yn0lHTi0J9ivqlZMf09A2iI51fmI+0KkzIzyCbWOBWPi5mdaY7YWmXprk12aYh9u/qfWHQUYthlwg=="
+      },
+      "Microsoft.Extensions.Compliance.Abstractions": {
+        "type": "Transitive",
+        "resolved": "9.7.0",
+        "contentHash": "/oQydlBfhE83OwLXSdxoOqQaiquX+l24ptnSB8hFBw5o/BiY0Npg6DItB/87M+lBj9EAAVp3Kj9phlgVrr8P7Q==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.7",
+          "Microsoft.Extensions.ObjectPool": "9.0.7"
+        }
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",
@@ -312,6 +333,11 @@
           "Microsoft.Extensions.Options": "9.0.7",
           "Microsoft.Extensions.Primitives": "9.0.7"
         }
+      },
+      "Microsoft.Extensions.ObjectPool": {
+        "type": "Transitive",
+        "resolved": "9.0.7",
+        "contentHash": "9S4vPGg0NNBAxAkAGiOyWMAgDCmOK8uDnFryhcahmOqyArrI0MXju60Yk+UpDwXafVmjj+U0kJXwEyXjSJ3icA=="
       },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",

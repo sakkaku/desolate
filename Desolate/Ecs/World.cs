@@ -1,22 +1,36 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using Desolate.Event;
 using Desolate.Eventing;
+using Desolate.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+
+using SystemRegistration = (Desolate.Ecs.IEcsSystem System, string Name);
 
 namespace Desolate.Ecs;
 
 /// <summary>
 ///     Represents the combined state of entities, components and systems.
 /// </summary>
-public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisposable
+public sealed class World(IServiceProvider services, IEventBus eventBus, Meter meter) : IDisposable
 {
     private readonly Dictionary<int, Entity> _entities = [];
     private readonly EntityKeyManager _keyManager = new();
-    private readonly List<IEcsSystem> _systems = [];
-
+    private readonly List<SystemRegistration> _systems = [];
+    private readonly SystemProcessingTimeMetric _systemMetrics = DesolateMetrics.CreateSystemProcessingTime(meter);
+    
     /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var system in _systems.OfType<IDisposable>()) system.Dispose();
+        foreach (var system in _systems)
+        {
+            if (system.System is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+
+        _systems.Clear();
     }
 
     /// <summary>
@@ -79,19 +93,19 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
     /// <summary>
     ///     Registers the system via dependency injection
     /// </summary>
-    public async ValueTask RegisterSystem<T>() where T : IEcsSystem
+    public async ValueTask RegisterSystem<T>(string name) where T : IEcsSystem
     {
         var system = services.GetRequiredService<T>();
-        await RegisterSystem(system);
+        await RegisterSystem(name, system);
     }
 
     /// <summary>
     ///     Registers the system into the world.
     /// </summary>
-    public ValueTask RegisterSystem<T>(T system) where T : IEcsSystem
+    public ValueTask RegisterSystem<T>(string name, T system) where T : IEcsSystem
     {
         system.World = this;
-        _systems.Add(system);
+        _systems.Add((system, name));
         return default;
     }
 
@@ -102,19 +116,30 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
     {
         system.World = null;
 
-        _systems.Remove(system);
+        var matches = _systems
+            .Where(x => ReferenceEquals(x.System, system))
+            .ToList();
 
-        if (system is IDisposable disposable) disposable.Dispose();
+        foreach (var match in matches)
+        {
+            _systems.Remove(match);
 
+            if (match.System is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+        
         return default;
     }
 
     /// <summary>
     ///     Retrieves the systems that match the specified type.
     /// </summary>
-    public IEnumerable<T> GetSystems<T>() where T : IEcsSystem
+    public IEnumerable<SystemRegistration> GetSystems<T>() where T : IEcsSystem
     {
-        return _systems.OfType<T>();
+        var type = typeof(T);
+        return _systems.Where(x => x.System.GetType().IsSubclassOf(type));
     }
 
     /// <summary>
@@ -122,6 +147,14 @@ public sealed class World(IServiceProvider services, IEventBus eventBus) : IDisp
     /// </summary>
     public async ValueTask Update(CancellationToken ct)
     {
-        foreach (var system in _systems) await system.Update(ct);
+        var sw = new Stopwatch();
+        sw.Start();
+        
+        foreach (var (system, name) in _systems)
+        {
+            sw.Reset();
+            await system.Update(ct);
+            _systemMetrics.Record(sw.ElapsedMilliseconds, new (name));
+        }
     }
 }

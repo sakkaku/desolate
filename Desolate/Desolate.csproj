@@ -24,6 +24,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7"/>
+        <PackageReference Include="Microsoft.Extensions.Telemetry.Abstractions" Version="9.7.0" />
         <PackageReference Include="Silk.NET.Maths" Version="2.22.0"/>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
             <PrivateAssets>all</PrivateAssets>

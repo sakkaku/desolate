@@ -8,7 +8,7 @@ namespace Desolate.Helpers;
 public sealed class ObjectPropertyChangeTracker<T> : IDisposable where T : INotifyPropertyChanged
 {
     private readonly List<T> _subscriptions = [];
-    private HashSet<ChangedProperty<T>> _updates = [];
+    private HashSet<ChangedProperty> _updates = [];
 
     /// <inheritdoc />
     public void Dispose()
@@ -48,21 +48,29 @@ public sealed class ObjectPropertyChangeTracker<T> : IDisposable where T : INoti
     /// <summary>
     ///     Retrieves the current changes and resets the tracker.
     /// </summary>
-    public HashSet<ChangedProperty<T>> GetUpdatesAndReset()
+    public HashSet<ChangedProperty> GetUpdatesAndReset()
     {
         var updates = _updates;
-        _updates = [];
+        Reset();
         return updates;
+    }
+
+    /// <summary>
+    ///     Resets the tracker.
+    /// </summary>
+    public void Reset()
+    {
+        _updates = [];
     }
 
     private void TargetOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is T target && e.PropertyName is not null)
-            _updates.Add(new ChangedProperty<T>(target, e.PropertyName));
+            _updates.Add(new ChangedProperty(target, e.PropertyName));
     }
 
     /// <summary>
     ///     Represents a property that has changed in the target.
     /// </summary>
-    public record ChangedProperty<T>(T Target, string PropertyName);
+    public record ChangedProperty(T Target, string PropertyName);
 }

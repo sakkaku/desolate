@@ -10,13 +10,20 @@ namespace Desolate.Systems;
 public sealed class ParentOffsetSystem : AbstractSystem
 {
     /// <summary>
-    /// Initializes the system.
+    ///     Initializes the system.
     /// </summary>
     public ParentOffsetSystem(IEventBus bus) : base(bus)
     {
         RequiredComponentTypes.Add(typeof(HierarchyParent));
         RequiredComponentTypes.Add(typeof(HierarchyOffset));
         RequiredComponentTypes.Add(typeof(PositionedObject));
+    }
+
+    /// <inheritdoc />
+    protected override ValueTask<bool> ValidateEntity(Entity entity, CancellationToken ct)
+    {
+        var parent = entity.GetComponent<HierarchyParent>().Parent;
+        return ValueTask.FromResult(parent.HasComponent<PositionedObject>());
     }
 
     /// <inheritdoc />

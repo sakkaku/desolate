@@ -162,6 +162,15 @@
         "resolved": "17.11.1",
         "contentHash": "nPJqrcA5iX+Y0kqoT3a+pD/8lrW/V7ayqnEJQsTonSoPz59J8bmoQhcSN4G8+UJ64Hkuf0zuxnfuj2lkHOq4cA=="
       },
+      "Microsoft.Extensions.Compliance.Abstractions": {
+        "type": "Transitive",
+        "resolved": "9.7.0",
+        "contentHash": "/oQydlBfhE83OwLXSdxoOqQaiquX+l24ptnSB8hFBw5o/BiY0Npg6DItB/87M+lBj9EAAVp3Kj9phlgVrr8P7Q==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.7",
+          "Microsoft.Extensions.ObjectPool": "9.0.7"
+        }
+      },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",
         "resolved": "9.0.7",
@@ -414,6 +423,11 @@
           "Microsoft.Extensions.Primitives": "9.0.7"
         }
       },
+      "Microsoft.Extensions.ObjectPool": {
+        "type": "Transitive",
+        "resolved": "9.0.7",
+        "contentHash": "9S4vPGg0NNBAxAkAGiOyWMAgDCmOK8uDnFryhcahmOqyArrI0MXju60Yk+UpDwXafVmjj+U0kJXwEyXjSJ3icA=="
+      },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",
         "resolved": "9.0.7",
@@ -439,6 +453,17 @@
         "type": "Transitive",
         "resolved": "9.0.7",
         "contentHash": "ti/zD9BuuO50IqlvhWQs9GHxkCmoph5BHjGiWKdg2t6Or8XoyAfRJiKag+uvd/fpASnNklfsB01WpZ4fhAe0VQ=="
+      },
+      "Microsoft.Extensions.Telemetry.Abstractions": {
+        "type": "Transitive",
+        "resolved": "9.7.0",
+        "contentHash": "PgzFKLbv4ciRuRNJddHPp4UZ4Yh12WOSX2aNsVpNlSp9EsZKsSjatcx90x+xAJo8jChiPxTIkLnKWjl5fC5Lig==",
+        "dependencies": {
+          "Microsoft.Extensions.Compliance.Abstractions": "9.7.0",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.7",
+          "Microsoft.Extensions.ObjectPool": "9.0.7",
+          "Microsoft.Extensions.Options": "9.0.7"
+        }
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
@@ -1402,6 +1427,7 @@
           "CommunityToolkit.Diagnostics": "[8.4.0, )",
           "MemoryPack": "[1.21.4, )",
           "Microsoft.Extensions.Hosting": "[9.0.7, )",
+          "Microsoft.Extensions.Telemetry.Abstractions": "[9.7.0, )",
           "Silk.NET.Maths": "[2.22.0, )"
         }
       }

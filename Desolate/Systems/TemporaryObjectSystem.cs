@@ -20,6 +20,7 @@ public sealed class TemporaryObjectSystem : AbstractSystem
         RequiredComponentTypes.Add(typeof(TemporaryObject));
     }
 
+    /// <inheritdoc />
     public override async ValueTask Update(CancellationToken ct)
     {
         Guard.IsNotNull(World);

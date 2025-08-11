@@ -44,7 +44,7 @@ public sealed class InterpolatingPhysicsSystem : AbstractSystem
             var delta = _time.DeltaTime;
 
             position.Position += physics.PositionalVelocity * delta;
-            position.Rotation += physics.AngularVelocity * delta;
+            position.Rotation *= physics.AngularVelocity * delta;
         }
 
         return default;
